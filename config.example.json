@@ -1,0 +1,4 @@
+{
+  "token": "YOUR_USER_TOKEN_HERE",
+  "webhook": "https://discord.com/api/webhooks/WEBHOOK_ID/WEBHOOK_TOKEN"
+}
