@@ -1,28 +1,16 @@
 import io
-import json
 import logging
 import sys
 from pathlib import Path
 
 import discord
 
+from config import load_config
+
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s: %(message)s")
 log = logging.getLogger("guildproxy")
 
-CONFIG_PATH = Path(__file__).resolve().parent / "config.json"
-
 IMAGE_EXTENSIONS = {".png", ".jpg", ".jpeg", ".gif", ".webp", ".bmp", ".avif"}
-
-
-def load_config() -> dict:
-    if not CONFIG_PATH.exists():
-        raise SystemExit(f"config file not found: {CONFIG_PATH}")
-    with CONFIG_PATH.open(encoding="utf-8") as f:
-        config = json.load(f)
-    for key in ("token", "webhook"):
-        if not config.get(key):
-            raise SystemExit(f"missing '{key}' in {CONFIG_PATH}")
-    return config
 
 
 def is_image(attachment: discord.Attachment) -> bool:
@@ -107,7 +95,7 @@ def main() -> None:
     except ValueError:
         raise SystemExit(f"invalid GUILD_ID: {sys.argv[1]!r}")
 
-    config = load_config()
+    config = load_config("token", "webhook")
     client = GuildProxy(
         guild_id=guild_id,
         webhook_url=config["webhook"],
